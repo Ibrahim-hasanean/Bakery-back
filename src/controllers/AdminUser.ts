@@ -32,11 +32,16 @@ export const getUsers = async (req: IAdminRequest, res: Response, next: NextFunc
         let query: any = {};
         let pageNumber: number = Number(page || 1);
         let skip: number = (pageNumber - 1) * 5;
-        if (name) query.name = name;
+        if (name) query.name = { $regex: name, $options: "i" };
         if (userCount) query.userCount = Number(userCount);
         if (phoneNumber) query.phoneNumber = phoneNumber;
-        var users: UserInterface[] = await User
-            .find(query)
+        // var users: UserInterface[] = await User
+        //     .find(query)
+        //     .sort({ createdAt: 'descending' })
+        //     .skip(Number(skip || 0))
+        //     .limit(5);
+        var users: UserInterface[] = await User.aggregate()
+            .match(query)
             .sort({ createdAt: 'descending' })
             .skip(Number(skip || 0))
             .limit(5);
@@ -67,8 +72,6 @@ export const getUser = async (req: IAdminRequest, res: Response, next: NextFunct
         if (orderCount) query.orderCount = Number(orderCount);
         let pageNumber: number = Number(page || 1);
         let skip: number = (pageNumber - 1) * 5;
-        console.log(skip)
-        console.log(page)
         const user: UserInterface = await User.findById(userId)
             .populate({
                 path: "orders",

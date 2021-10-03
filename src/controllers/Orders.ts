@@ -10,12 +10,12 @@ export const getOrders = async (req: AdminRequest, res: Response, next: NextFunc
     try {
         const { from, to, userName, phoneNumber, page, orderCount } = req.query as { to: string, from: string, userName: string, phoneNumber: string, page: string, orderCount: string };
         let query: any = {};
-        if (from || to) query.createdAt = {}
+        if (from || to) query.date = {}
         if (from) {
-            query.createdAt.$gte = new Date(new Date(from).setHours(0, 0, 0));
+            query.date.$gte = new Date(new Date(from).setHours(0, 0, 0));
         }
         if (to) {
-            query.createdAt.$lte = new Date(new Date(to).setHours(23, 59, 59));
+            query.date.$lte = new Date(new Date(to).setHours(23, 59, 59));
         }
         if (userName && phoneNumber) {
             const users = await User.find({ name: userName, phoneNumber: phoneNumber });
