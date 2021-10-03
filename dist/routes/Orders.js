@@ -1,0 +1,21 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const Orders_1 = require("../controllers/Orders");
+const orderValidate_1 = require("../middleware/orderValidate");
+const verifyCanManageBreed_1 = __importDefault(require("../middleware/verifyCanManageBreed"));
+const verifyCanManageFlour_1 = __importDefault(require("../middleware/verifyCanManageFlour"));
+const verifyAdmin_1 = __importDefault(require("../middleware/verifyAdmin"));
+const router = (0, express_1.Router)();
+router.get("/home", verifyAdmin_1.default, (0, orderValidate_1.validate)(orderValidate_1.addFlourSchema), Orders_1.summary);
+router.get("/", verifyAdmin_1.default, Orders_1.getOrders);
+router.delete("/:id", verifyCanManageFlour_1.default, Orders_1.deleteOrder);
+router.patch("/:id", verifyCanManageFlour_1.default, Orders_1.editeOrder);
+router.post("/flour", verifyCanManageFlour_1.default, (0, orderValidate_1.validate)(orderValidate_1.addFlourSchema), Orders_1.addFlour);
+router.post("/breed", verifyCanManageBreed_1.default, (0, orderValidate_1.validate)(orderValidate_1.addBreedSchema), Orders_1.addBreed);
+router.post("/debt", verifyCanManageBreed_1.default, (0, orderValidate_1.validate)(orderValidate_1.addDebtSchema), Orders_1.addDebt);
+router.post("/paid", verifyCanManageBreed_1.default, (0, orderValidate_1.validate)(orderValidate_1.addPayedSchema), Orders_1.PaidDebt);
+exports.default = router;
