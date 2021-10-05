@@ -152,7 +152,8 @@ export const upadateUser = async (req: IAdminRequest, res: Response, next: NextF
 export const deleteUser = async (req: IAdminRequest, res: Response, next: NextFunction) => {
     try {
         let userId = req.params.id;
-        var user = await User.findByIdAndDelete(userId);
+        let user = await User.findByIdAndDelete(userId);
+        let deleteUsers = await Order.deleteMany({ userId });
         return res.status(200).json({ status: 200, user });
     } catch (error) {
         console.log(error);

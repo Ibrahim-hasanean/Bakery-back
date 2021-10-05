@@ -5,6 +5,20 @@ import dotenv from "dotenv";
 import IAdminRequest from "../types/AdminRequests";
 dotenv.config();
 
+export const addBigAdmin = async (req: Request, res: Response, next: NextFunction) => {
+    const { name, password, phoneNumber, } = req.body;
+    try {
+        let isExist = await Admin.findOne({ phoneNumber });
+        if (isExist) return res.status(409).json({ status: 409, msg: "رقم الجوال مستخدم" });
+        let newAdmin = await Admin.create({ name, password, phoneNumber, isBigManager: true, canManageDebts: true, canManagePaid: true, canManageUsers: true, canManageFlour: true, canManageBreed: true });
+        return res.status(201).json({ status: 201, msg: "تم اضافة الادمن بنجاح", admin: newAdmin });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("something wrong")
+
+    }
+}
+
 export const addAdmin = async (req: Request, res: Response, next: NextFunction) => {
     const { name, password, phoneNumber, isBigManager, canManageUsers, canManageFlour, canManageBreed, canManageDebts, canManagePaid } = req.body;
     try {

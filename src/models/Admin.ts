@@ -33,7 +33,6 @@ adminSchema.pre("save", async function (next) {
 adminSchema.methods.comparePassword = async function (candidatePassword: string) {
     let user = this as UserInterface;
     return candidatePassword == user.password;
-
 }
 
 
