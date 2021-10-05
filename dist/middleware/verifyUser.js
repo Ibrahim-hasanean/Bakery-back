@@ -21,7 +21,7 @@ function verifyUser(req, res, next) {
         let authorization = req.headers.authorization;
         if (!authorization)
             return res.status(401).json({ status: 401, msg: "unauthorize" });
-        let jwtSecret = process.env.Admins_JWT_SECRET;
+        let jwtSecret = process.env.Users_JWT_SECRET;
         let token = authorization === null || authorization === void 0 ? void 0 : authorization.split(" ")[1];
         try {
             let decoded = jsonwebtoken_1.default.verify(token, jwtSecret);

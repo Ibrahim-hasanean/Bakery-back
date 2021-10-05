@@ -173,7 +173,8 @@ exports.upadateUser = upadateUser;
 const deleteUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let userId = req.params.id;
-        var user = yield User_1.default.findByIdAndDelete(userId);
+        let user = yield User_1.default.findByIdAndDelete(userId);
+        let deleteUsers = yield Orders_1.default.deleteMany({ userId });
         return res.status(200).json({ status: 200, user });
     }
     catch (error) {

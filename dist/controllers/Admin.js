@@ -12,11 +12,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.login = exports.updateAdmin = exports.deleteAdmin = exports.getAdmin = exports.getAdmins = exports.refreshAdmin = exports.addAdmin = void 0;
+exports.login = exports.updateAdmin = exports.deleteAdmin = exports.getAdmin = exports.getAdmins = exports.refreshAdmin = exports.addAdmin = exports.addBigAdmin = void 0;
 const Admin_1 = __importDefault(require("../models/Admin"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
+const addBigAdmin = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { name, password, phoneNumber, } = req.body;
+    try {
+        let isExist = yield Admin_1.default.findOne({ phoneNumber });
+        if (isExist)
+            return res.status(409).json({ status: 409, msg: "رقم الجوال مستخدم" });
+        let newAdmin = yield Admin_1.default.create({ name, password, phoneNumber, isBigManager: true, canManageDebts: true, canManagePaid: true, canManageUsers: true, canManageFlour: true, canManageBreed: true });
+        return res.status(201).json({ status: 201, msg: "تم اضافة الادمن بنجاح", admin: newAdmin });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).send("something wrong");
+    }
+});
+exports.addBigAdmin = addBigAdmin;
 const addAdmin = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, password, phoneNumber, isBigManager, canManageUsers, canManageFlour, canManageBreed, canManageDebts, canManagePaid } = req.body;
     try {
