@@ -35,7 +35,7 @@ export const getUsers = async (req: IAdminRequest, res: Response, next: NextFunc
         if (account) {
             let accountNumber = Number(account);
             if (accountNumber == 1) query.account = { $gt: 0 };
-            if (accountNumber == 2) query.account = { $lte: 0 };
+            if (accountNumber == 2) query.account = { $lt: 0 };
         }
         if (name) query.name = { $regex: name, $options: "i" };
         if (userCount) query.userCount = Number(userCount);

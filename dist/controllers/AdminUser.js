@@ -49,7 +49,7 @@ const getUsers = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
             if (accountNumber == 1)
                 query.account = { $gt: 0 };
             if (accountNumber == 2)
-                query.account = { $lte: 0 };
+                query.account = { $lt: 0 };
         }
         if (name)
             query.name = { $regex: name, $options: "i" };
