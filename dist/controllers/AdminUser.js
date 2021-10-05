@@ -40,21 +40,23 @@ const addUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
 exports.addUser = addUser;
 const getUsers = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let { name, phoneNumber, page, userCount } = req.query;
+        let { name, phoneNumber, page, userCount, account } = req.query;
         let query = {};
         let pageNumber = Number(page || 1);
         let skip = (pageNumber - 1) * 5;
+        if (account) {
+            let accountNumber = Number(account);
+            if (accountNumber == 1)
+                query.account = { $gt: 0 };
+            if (accountNumber == 2)
+                query.account = { $lte: 0 };
+        }
         if (name)
             query.name = { $regex: name, $options: "i" };
         if (userCount)
             query.userCount = Number(userCount);
         if (phoneNumber)
             query.phoneNumber = phoneNumber;
-        // var users: UserInterface[] = await User
-        //     .find(query)
-        //     .sort({ createdAt: 'descending' })
-        //     .skip(Number(skip || 0))
-        //     .limit(5);
         var users = yield User_1.default.aggregate()
             .match(query)
             .sort({ createdAt: 'descending' })
