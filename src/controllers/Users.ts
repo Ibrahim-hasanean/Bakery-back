@@ -23,7 +23,9 @@ export const login = async (req: IUserRequest, res: Response, next: NextFunction
 export const getUserOrders = async (req: IUserRequest, res: Response, next: NextFunction) => {
     let user: UserInterface = req.user as UserInterface;
     let query: any = { userId: user._id };
-    let { from, to } = req.query as { from: string, to: string };
+    let { from, to, page } = req.query as { from: string, to: string, page: string };
+    let pageNumber: number = Number(page || 1);
+    let skip: number = (pageNumber - 1) * 5;
     if (from || to) query.createdAt = {};
     if (from) {
         query.createdAt.$gte = new Date(new Date(from).setHours(0, 0, 0));
@@ -31,7 +33,7 @@ export const getUserOrders = async (req: IUserRequest, res: Response, next: Next
     if (to) {
         query.createdAt.$lte = new Date(new Date(to).setHours(23, 59, 59));
     }
-    let orders = await Order.find(query);
+    let orders = await Order.find(query).sort({ date: 'descending' }).limit(10);
     const ordersSummary = await Order.aggregate().match(query).group({
         _id: null,
         totalFlour: {
