@@ -35,7 +35,9 @@ exports.login = login;
 const getUserOrders = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     let user = req.user;
     let query = { userId: user._id };
-    let { from, to } = req.query;
+    let { from, to, page } = req.query;
+    let pageNumber = Number(page || 1);
+    let skip = (pageNumber - 1) * 5;
     if (from || to)
         query.createdAt = {};
     if (from) {
@@ -44,7 +46,7 @@ const getUserOrders = (req, res, next) => __awaiter(void 0, void 0, void 0, func
     if (to) {
         query.createdAt.$lte = new Date(new Date(to).setHours(23, 59, 59));
     }
-    let orders = yield Orders_1.default.find(query);
+    let orders = yield Orders_1.default.find(query).sort({ date: 'descending' }).limit(10);
     const ordersSummary = yield Orders_1.default.aggregate().match(query).group({
         _id: null,
         totalFlour: {
