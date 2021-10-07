@@ -36,8 +36,9 @@ const getUserOrders = (req, res, next) => __awaiter(void 0, void 0, void 0, func
     let user = req.user;
     let query = { userId: user._id };
     let { from, to, page } = req.query;
+    console.log(page);
     let pageNumber = Number(page || 1);
-    let skip = (pageNumber - 1) * 5;
+    let skip = (pageNumber - 1) * 10;
     if (from || to)
         query.createdAt = {};
     if (from) {
@@ -46,7 +47,9 @@ const getUserOrders = (req, res, next) => __awaiter(void 0, void 0, void 0, func
     if (to) {
         query.createdAt.$lte = new Date(new Date(to).setHours(23, 59, 59));
     }
-    let orders = yield Orders_1.default.find(query).sort({ date: 'descending' }).limit(10);
+    let orders = yield Orders_1.default.find(query).sort({ date: 'descending' }).skip(skip).limit(10);
+    const ordrsCount = yield Orders_1.default.find(query).count();
+    const pagesNumber = Math.ceil(ordrsCount / 10);
     const ordersSummary = yield Orders_1.default.aggregate().match(query).group({
         _id: null,
         totalFlour: {
@@ -66,6 +69,6 @@ const getUserOrders = (req, res, next) => __awaiter(void 0, void 0, void 0, func
     const restFlour = ordersSummary[0] ? ordersSummary[0].totalFlour - ordersSummary[0].totalBreed : 0;
     const totalAccount = ordersSummary[0] ? ordersSummary[0].totalBreed + ordersSummary[0].totalDebt : 0;
     const restAccount = ordersSummary[0] ? totalAccount - ordersSummary[0].totalPayed : 0;
-    return res.status(200).json({ status: 200, summary: Object.assign(Object.assign({}, ordersSummary[0]), { usersCount, restFlour, totalAccount, restAccount }), orders });
+    return res.status(200).json({ status: 200, pagesNumber, summary: Object.assign(Object.assign({}, ordersSummary[0]), { usersCount, restFlour, totalAccount, restAccount }), orders });
 });
 exports.getUserOrders = getUserOrders;

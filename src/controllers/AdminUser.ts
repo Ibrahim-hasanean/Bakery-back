@@ -21,8 +21,7 @@ export const addUser = async (req: IAdminRequest, res: Response, next: NextFunct
         return res.status(201).json({ status: 201, msg: "تم اضافة المستخدم بنجاح", user: newUser });
     } catch (error) {
         console.log(error);
-        res.status(500).send("something wrong")
-
+        res.status(500).send("something wrong");
     }
 }
 
