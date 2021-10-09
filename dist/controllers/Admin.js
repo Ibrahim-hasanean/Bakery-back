@@ -154,7 +154,7 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
     }
     catch (error) {
         console.log(error);
-        res.status(500).send("something wrong");
+        res.status(500).send(error);
     }
 });
 exports.login = login;
