@@ -133,7 +133,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
         return res.status(200).json({ statu: 200, token, admin });
     } catch (error) {
         console.log(error);
-        res.status(500).send("something wrong");
+        res.status(500).send(error);
     }
 }
 
