@@ -7,7 +7,11 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const databaseURL = process.env.DATABASE_URL;
-mongoose_1.default.connect(databaseURL).then(() => { console.log("database connected"); }).catch((e) => {
+// mongoose.connect(databaseURL).then(() => { console.log("database connected") }).catch((e) => {
+//     console.log("Error in database connection");
+//     console.log(e);
+// })
+mongoose_1.default.connect("mongodb://localhost:27017/el-madina").then(() => { console.log("database connected"); }).catch((e) => {
     console.log("Error in database connection");
     console.log(e);
 });
