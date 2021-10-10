@@ -11,7 +11,7 @@ const databaseURL = process.env.DATABASE_URL;
 //     console.log("Error in database connection");
 //     console.log(e);
 // })
-mongoose_1.default.connect("mongodb://localhost:27017/el-madina").then(() => { console.log("database connected"); }).catch((e) => {
+mongoose_1.default.connect("mongodb+srv://ibrahim:481997@cluster0.lyvgk.mongodb.net/bakeryTest?retryWrites=true&w=majority").then(() => { console.log("database connected"); }).catch((e) => {
     console.log("Error in database connection");
     console.log(e);
 });
