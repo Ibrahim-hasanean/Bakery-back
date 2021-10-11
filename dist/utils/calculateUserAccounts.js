@@ -17,6 +17,7 @@ const calculateSummary_1 = __importDefault(require("./calculateSummary"));
 const Orders_1 = __importDefault(require("../models/Orders"));
 function calculateUserAccounts(userId) {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log(userId);
         let match = { userId: new mongoose_1.default.Types.ObjectId(userId) };
         const ordersSummary = yield Orders_1.default.aggregate().match(match).group({
             _id: null,
@@ -33,8 +34,9 @@ function calculateUserAccounts(userId) {
                 $sum: "$debt"
             }
         });
+        console.log(ordersSummary);
         const { restFlour, totalAccount, restAccount } = (0, calculateSummary_1.default)(ordersSummary[0]);
-        return { restFlour, totalBreed: ordersSummary[0].totalBreed, totalPayed: ordersSummary[0].totalPayed, totalDebt: ordersSummary[0].totalDebt, restAccount };
+        return { restFlour, totalBreed: ordersSummary[0] ? ordersSummary[0].totalBreed : 0, totalPayed: ordersSummary[0] ? ordersSummary[0].totalPayed : 0, totalDebt: ordersSummary[0] ? ordersSummary[0].totalDebt : 0, restAccount };
     });
 }
 exports.default = calculateUserAccounts;
