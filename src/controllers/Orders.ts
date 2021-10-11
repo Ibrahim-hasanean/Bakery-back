@@ -262,6 +262,7 @@ export const PaidDebt = async (req: AdminRequest, res: Response, next: NextFunct
 export const summary = async (req: AdminRequest, res: Response, next: NextFunction) => {
     let { page } = req.query as { page: string };
     try {
+        console.log("hoome");
         let pageNumber: number = Number(page || 1);
         const usersCount = await User.count();
         let skip: number = (pageNumber - 1) * 5;

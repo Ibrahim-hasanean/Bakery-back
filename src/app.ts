@@ -7,16 +7,21 @@ import AdminUserRoutes from "./routes/AdminUsers";
 import UsersRoutes from "./routes/Users";
 import OrdersRoutes from "./routes/Orders";
 import { errors } from "celebrate";
+import path from "path";
 const app: Express = express();
 const port = process.env.PORT || 4000;
 
 dotenv.config();
 app.use(cors());
 app.use(express.json());
-app.use("/admins/users", AdminUserRoutes);
-app.use("/admins/orders", OrdersRoutes);
-app.use("/admins", AdminRoutes);
-app.use("/users", UsersRoutes);
+app.use("/", express.static(path.join(__dirname, "build")));
+app.use("/api/admins/users", AdminUserRoutes);
+app.use("/api/admins/orders", OrdersRoutes);
+app.use("/api/admins", AdminRoutes);
+app.use("/api/users", UsersRoutes);
+app.use("*", (req, res) => {
+    res.redirect("/");
+})
 app.use(errors());
 app.use((err: Errback, req: Request, res: Response, next: NextFunction) => {
     res.send(err)

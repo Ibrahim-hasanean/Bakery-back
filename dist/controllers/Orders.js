@@ -288,6 +288,7 @@ exports.PaidDebt = PaidDebt;
 const summary = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     let { page } = req.query;
     try {
+        console.log("hoome");
         let pageNumber = Number(page || 1);
         const usersCount = yield User_1.default.count();
         let skip = (pageNumber - 1) * 5;
