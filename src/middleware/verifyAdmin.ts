@@ -12,6 +12,7 @@ export default async function verifyAdmin(req: IAdminRequest, res: Response, nex
     try {
         let decoded: any = jwt.verify(token, jwtSecret);
         let admin = await Admin.findOne({ phoneNumber: decoded.phoneNumber });
+        if (!admin) return res.status(401).json({ status: 401, msg: "unauthorize" });
         req.admin = admin;
         return next();
     } catch (error: any) {

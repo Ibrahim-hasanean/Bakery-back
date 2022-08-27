@@ -26,6 +26,8 @@ function verifyAdmin(req, res, next) {
         try {
             let decoded = jsonwebtoken_1.default.verify(token, jwtSecret);
             let admin = yield Admin_1.default.findOne({ phoneNumber: decoded.phoneNumber });
+            if (!admin)
+                return res.status(401).json({ status: 401, msg: "unauthorize" });
             req.admin = admin;
             return next();
         }
