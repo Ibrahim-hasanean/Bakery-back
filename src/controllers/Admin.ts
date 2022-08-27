@@ -37,13 +37,14 @@ export const refreshAdmin = async (req: IAdminRequest, res: Response, next: Next
     try {
         let admin: AdminInterface = req.admin as AdminInterface;
         let jwtSecret = process.env.Admins_JWT_SECRET as string;
+        if (!admin) return res.status(401).json({ status: 401, msg: "unauthorize" });
         let token = jwt.sign({
-            adminId: admin._id,
-            phoneNumber: admin.phoneNumber,
-            isBigManager: admin.isBigManager,
-            canManageUsers: admin.canManageUsers,
-            canManageFlour: admin.canManageFlour,
-            canManageBreed: admin.canManageBreed,
+            adminId: admin?._id,
+            phoneNumber: admin?.phoneNumber,
+            isBigManager: admin?.isBigManager,
+            canManageUsers: admin?.canManageUsers,
+            canManageFlour: admin?.canManageFlour,
+            canManageBreed: admin?.canManageBreed,
         }, jwtSecret);
         return res.status(200).json({ status: 200, admin, token });
     } catch (error) {

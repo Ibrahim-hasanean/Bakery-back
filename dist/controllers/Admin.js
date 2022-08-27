@@ -51,13 +51,15 @@ const refreshAdmin = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
     try {
         let admin = req.admin;
         let jwtSecret = process.env.Admins_JWT_SECRET;
+        if (!admin)
+            return res.status(401).json({ status: 401, msg: "unauthorize" });
         let token = jsonwebtoken_1.default.sign({
-            adminId: admin._id,
-            phoneNumber: admin.phoneNumber,
-            isBigManager: admin.isBigManager,
-            canManageUsers: admin.canManageUsers,
-            canManageFlour: admin.canManageFlour,
-            canManageBreed: admin.canManageBreed,
+            adminId: admin === null || admin === void 0 ? void 0 : admin._id,
+            phoneNumber: admin === null || admin === void 0 ? void 0 : admin.phoneNumber,
+            isBigManager: admin === null || admin === void 0 ? void 0 : admin.isBigManager,
+            canManageUsers: admin === null || admin === void 0 ? void 0 : admin.canManageUsers,
+            canManageFlour: admin === null || admin === void 0 ? void 0 : admin.canManageFlour,
+            canManageBreed: admin === null || admin === void 0 ? void 0 : admin.canManageBreed,
         }, jwtSecret);
         return res.status(200).json({ status: 200, admin, token });
     }
