@@ -40,11 +40,11 @@ const userSchema = new Schema({
 }, { timestamps: true });
 
 userSchema.pre("save", async function (next) {
-    let user = this as UserInterface;
+    let user = this;
     if (!user.isModified("password")) return next();
 })
 
-userSchema.methods.comparePassword = async function (candidatePassword) {
+userSchema.methods.comparePassword = async function (candidatePassword: string) {
     let user = this as UserInterface;
     return user.password == candidatePassword;
 }

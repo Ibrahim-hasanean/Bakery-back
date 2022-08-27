@@ -59,11 +59,14 @@ const getUsers = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
             query.phoneNumber = phoneNumber;
         var users = yield User_1.default.aggregate()
             .match(query)
-            .sort({ createdAt: 'descending' })
-            .skip(Number(skip || 0))
-            .limit(5);
+            .sort({ createdAt: 'descending' });
+        // .skip(Number(skip || 0))
+        // .limit(5);
         let usersCount = yield User_1.default.where(query).count();
-        return res.status(200).json({ status: 200, users, pages: Math.ceil(usersCount / 5) });
+        return res.status(200).json({
+            status: 200, users,
+            // pages: Math.ceil(usersCount / 5)
+        });
     }
     catch (error) {
         console.log(error);

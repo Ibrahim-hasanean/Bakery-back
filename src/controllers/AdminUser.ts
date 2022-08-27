@@ -41,11 +41,14 @@ export const getUsers = async (req: IAdminRequest, res: Response, next: NextFunc
         if (phoneNumber) query.phoneNumber = phoneNumber;
         var users: UserInterface[] = await User.aggregate()
             .match(query)
-            .sort({ createdAt: 'descending' })
-            .skip(Number(skip || 0))
-            .limit(5);
+            .sort({ createdAt: 'descending' });
+        // .skip(Number(skip || 0))
+        // .limit(5);
         let usersCount = await User.where(query).count();
-        return res.status(200).json({ status: 200, users, pages: Math.ceil(usersCount / 5) });
+        return res.status(200).json({
+            status: 200, users,
+            // pages: Math.ceil(usersCount / 5)
+        });
     } catch (error) {
         console.log(error);
         res.status(500).send("something wrong");

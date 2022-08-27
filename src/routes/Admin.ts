@@ -5,7 +5,7 @@ import verifyManager from "../middleware/verifyManager";
 import verifyAdmin from "../middleware/verifyAdmin";
 const router = Router();
 
-// router.post("/bigadmin", addBigAdmin);
+router.post("/bigadmin", addBigAdmin);
 router.post("/register", verifyManager, validate(registerSchema), addAdmin);
 router.post("/login", validate(loginSchema), login);
 router.get("/refresh", verifyAdmin, refreshAdmin);

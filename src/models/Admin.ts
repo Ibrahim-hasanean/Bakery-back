@@ -27,7 +27,7 @@ const adminSchema = new Schema({
 });
 
 adminSchema.pre("save", async function (next) {
-    let admin = this as AdminInterface;
+    let admin = this;
     if (!admin.isModified("password")) return next();
 });
 adminSchema.methods.comparePassword = async function (candidatePassword: string) {

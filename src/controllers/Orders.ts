@@ -277,7 +277,8 @@ export const summary = async (req: AdminRequest, res: Response, next: NextFuncti
         //     await user.save();
         // });
 
-        const users = await User.find({}).sort({ createdAt: 'descending' }).skip(skip).limit(5);
+        const users = await User.find({}).sort({ createdAt: 'descending' });
+        // .skip(skip).limit(5);
         const ordersSummary = await Order.aggregate().group({
             _id: null,
             totalFlour: {

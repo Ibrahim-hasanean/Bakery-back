@@ -302,7 +302,8 @@ const summary = (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
         //     user.totalPayed = totalPayed;
         //     await user.save();
         // });
-        const users = yield User_1.default.find({}).sort({ createdAt: 'descending' }).skip(skip).limit(5);
+        const users = yield User_1.default.find({}).sort({ createdAt: 'descending' });
+        // .skip(skip).limit(5);
         const ordersSummary = yield Orders_1.default.aggregate().group({
             _id: null,
             totalFlour: {
