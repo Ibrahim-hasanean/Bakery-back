@@ -30,7 +30,7 @@ export const getUsers = async (req: IAdminRequest, res: Response, next: NextFunc
         let { name, phoneNumber, page, userCount, account } = req.query as { name: string, phoneNumber: string, page: string, userCount: string, account: string };
         let query: any = {};
         let pageNumber: number = Number(page || 1);
-        let skip: number = (pageNumber - 1) * 5;
+        let skip: number = (pageNumber - 1) * 10;
         if (account) {
             let accountNumber = Number(account);
             if (accountNumber == 1) query.account = { $gt: 0 };
@@ -41,13 +41,13 @@ export const getUsers = async (req: IAdminRequest, res: Response, next: NextFunc
         if (phoneNumber) query.phoneNumber = phoneNumber;
         var users: UserInterface[] = await User.aggregate()
             .match(query)
-            .sort({ createdAt: 'descending' });
-        // .skip(Number(skip || 0))
-        // .limit(5);
+            .sort({ createdAt: 'descending' })
+            .skip(Number(skip || 0))
+            .limit(10);
         let usersCount = await User.where(query).count();
         return res.status(200).json({
             status: 200, users,
-            // pages: Math.ceil(usersCount / 5)
+            pages: Math.ceil(usersCount / 10)
         });
     } catch (error) {
         console.log(error);

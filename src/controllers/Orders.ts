@@ -265,7 +265,7 @@ export const summary = async (req: AdminRequest, res: Response, next: NextFuncti
         console.log("hoome");
         let pageNumber: number = Number(page || 1);
         const usersCount = await User.count();
-        let skip: number = (pageNumber - 1) * 5;
+        let skip: number = (pageNumber - 1) * 10;
         // const updatedUsers = await User.find();
         // updatedUsers.forEach(async user => {
         //     const { restFlour, totalBreed, totalPayed, totalDebt, restAccount } = await calulateUserAccounts(user._id);
@@ -277,8 +277,8 @@ export const summary = async (req: AdminRequest, res: Response, next: NextFuncti
         //     await user.save();
         // });
 
-        const users = await User.find({}).sort({ createdAt: 'descending' });
-        // .skip(skip).limit(5);
+        const users = await User.find({}).sort({ createdAt: 'descending' })
+            .skip(skip).limit(10);
         const ordersSummary = await Order.aggregate().group({
             _id: null,
             totalFlour: {
@@ -299,7 +299,7 @@ export const summary = async (req: AdminRequest, res: Response, next: NextFuncti
             .json({
                 status: 200,
                 summary: { ...ordersSummary[0], usersCount, restFlour, totalAccount, restAccount },
-                users: { users, usersCount }
+                users: { users, usersCount }, pages: Math.ceil(usersCount / 10)
             });
     } catch (error) {
         console.log(error);

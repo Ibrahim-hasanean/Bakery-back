@@ -43,7 +43,7 @@ const getUsers = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
         let { name, phoneNumber, page, userCount, account } = req.query;
         let query = {};
         let pageNumber = Number(page || 1);
-        let skip = (pageNumber - 1) * 5;
+        let skip = (pageNumber - 1) * 10;
         if (account) {
             let accountNumber = Number(account);
             if (accountNumber == 1)
@@ -59,13 +59,13 @@ const getUsers = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
             query.phoneNumber = phoneNumber;
         var users = yield User_1.default.aggregate()
             .match(query)
-            .sort({ createdAt: 'descending' });
-        // .skip(Number(skip || 0))
-        // .limit(5);
+            .sort({ createdAt: 'descending' })
+            .skip(Number(skip || 0))
+            .limit(10);
         let usersCount = yield User_1.default.where(query).count();
         return res.status(200).json({
             status: 200, users,
-            // pages: Math.ceil(usersCount / 5)
+            pages: Math.ceil(usersCount / 10)
         });
     }
     catch (error) {

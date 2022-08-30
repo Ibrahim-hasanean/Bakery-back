@@ -291,7 +291,7 @@ const summary = (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
         console.log("hoome");
         let pageNumber = Number(page || 1);
         const usersCount = yield User_1.default.count();
-        let skip = (pageNumber - 1) * 5;
+        let skip = (pageNumber - 1) * 10;
         // const updatedUsers = await User.find();
         // updatedUsers.forEach(async user => {
         //     const { restFlour, totalBreed, totalPayed, totalDebt, restAccount } = await calulateUserAccounts(user._id);
@@ -302,8 +302,8 @@ const summary = (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
         //     user.totalPayed = totalPayed;
         //     await user.save();
         // });
-        const users = yield User_1.default.find({}).sort({ createdAt: 'descending' });
-        // .skip(skip).limit(5);
+        const users = yield User_1.default.find({}).sort({ createdAt: 'descending' })
+            .skip(skip).limit(10);
         const ordersSummary = yield Orders_1.default.aggregate().group({
             _id: null,
             totalFlour: {
@@ -324,7 +324,7 @@ const summary = (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
             .json({
             status: 200,
             summary: Object.assign(Object.assign({}, ordersSummary[0]), { usersCount, restFlour, totalAccount, restAccount }),
-            users: { users, usersCount }
+            users: { users, usersCount }, pages: Math.ceil(usersCount / 10)
         });
     }
     catch (error) {
