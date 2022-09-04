@@ -79,9 +79,11 @@ const getUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
         const { from, to, orderCount, page } = req.query;
         const userId = req.params.id;
         let query = { userId: new mongoose_1.default.Types.ObjectId(userId) };
-        let match = { userId: new mongoose_1.default.Types.ObjectId(userId), date: { $lte: new Date(new Date().setHours(23, 59, 59)) } };
+        // let match: any = { userId: new mongoose.Types.ObjectId(userId), date: { $lte: new Date(new Date().setHours(23, 59, 59)) } };
+        let match = { userId: new mongoose_1.default.Types.ObjectId(userId), };
         if (from || to) {
             query.date = {};
+            match.date = {};
         }
         if (from) {
             query.date.$gte = new Date(new Date(from).setHours(0, 0, 0));
@@ -100,6 +102,7 @@ const getUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
             match: query,
             options: { sort: { date: "desc", orderCount: "desc" }, skip, limit: 5 }
         });
+        console.log(match);
         const ordersSummary = yield Orders_1.default.aggregate().match(match).group({
             _id: null,
             totalFlour: {

@@ -60,9 +60,11 @@ export const getUser = async (req: IAdminRequest, res: Response, next: NextFunct
         const { from, to, orderCount, page } = req.query as { from: string, to: string, orderCount: string, page: string };
         const userId: string = req.params.id;
         let query: any = { userId: new mongoose.Types.ObjectId(userId) };
-        let match: any = { userId: new mongoose.Types.ObjectId(userId), date: { $lte: new Date(new Date().setHours(23, 59, 59)) } };
+        // let match: any = { userId: new mongoose.Types.ObjectId(userId), date: { $lte: new Date(new Date().setHours(23, 59, 59)) } };
+        let match: any = { userId: new mongoose.Types.ObjectId(userId), };
         if (from || to) {
             query.date = {};
+            match.date = {};
         }
         if (from) {
             query.date.$gte = new Date(new Date(from).setHours(0, 0, 0));
@@ -80,6 +82,7 @@ export const getUser = async (req: IAdminRequest, res: Response, next: NextFunct
                 match: query,
                 options: { sort: { date: "desc", orderCount: "desc" }, skip, limit: 5 }
             }) as UserInterface;
+        console.log(match)
         const ordersSummary = await Order.aggregate().match(match).group({
             _id: null,
             totalFlour: {
